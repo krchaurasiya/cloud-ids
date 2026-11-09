@@ -1,0 +1,10 @@
+# Files NOT uploaded by "gcloud builds submit". Keep models/ (it is baked into the image).
+.venv/
+.git/
+data/
+results/
+tests/
+release/state.json
+release/history.jsonl
+**/__pycache__/
+*.pyc

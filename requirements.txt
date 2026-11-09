@@ -1,0 +1,9 @@
+# Development / training / experiments (Python 3.11).
+-r app/requirements.txt
+pyarrow==17.0.0
+matplotlib==3.9.2
+httpx==0.27.2
+PyYAML==6.0.2
+pytest==8.3.3
+locust>=2.29,<3
+google-cloud-monitoring>=2.21,<3

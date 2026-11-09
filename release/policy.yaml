@@ -1,0 +1,39 @@
+# Release policy for risk-aware promotion and rollback.
+# The numbers below are STARTING POINTS. Per the proposal (Phase 7), fix the final
+# values after you have measured the baseline model and the first latency test,
+# and write the final values + reasoning in the report.
+
+deployment:
+  project_id: YOUR_PROJECT_ID
+  region: asia-south1                 # Mumbai, closest to Goa
+  service: ids-api
+  image: asia-south1-docker.pkg.dev/YOUR_PROJECT_ID/ids-repo/ids-api:1.0
+  memory: 1Gi
+  cpu: "1"
+  min_instances: 0                    # keep 0 to avoid idle cost
+  max_instances: 2
+  concurrency: 20                     # requests per container
+  allow_unauthenticated: false        # private service; scripts send an identity token
+
+offline_gate:                         # checked on the VALIDATION split (test stays untouched)
+  min_recall: 0.95
+  max_recall_drop_vs_stable: 0.01     # absolute drop allowed vs current stable model
+  min_f1: 0.95
+  max_false_positive_rate: 0.02
+  max_local_single_p95_ms: 50
+
+online_gate:                          # pre-promotion check on the candidate's tagged URL (0% traffic)
+  n_requests: 200
+  concurrency: 10
+  max_p95_ms: 800
+  max_error_rate: 0.01
+
+post_deploy:                          # health watch on the main URL after promotion
+  duration_s: 180
+  batch_requests: 20
+  batch_concurrency: 5
+  pause_s: 3
+  max_p95_ms: 800
+  max_error_rate: 0.05
+  consecutive_breaches_to_rollback: 2
+  recovery_ok_in_a_row: 10            # stable must answer this many in a row to call it recovered

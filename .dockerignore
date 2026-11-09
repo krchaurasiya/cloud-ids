@@ -1,0 +1,9 @@
+.venv
+.git
+data
+results
+release/state.json
+release/history.jsonl
+tests
+**/__pycache__
+*.pyc

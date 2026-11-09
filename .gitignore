@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+data/raw/
+data/processed/
+models/*/model.joblib
+models/reference_sample.csv.gz
+results/*.json
+release/state.json
+.env
+*.key.json
